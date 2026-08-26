@@ -1,4 +1,5 @@
 export * from './base';
+export * from './agent-action-response';
 export * from './block-broken';
 export * from './block-placed';
 export * from './command-error';

@@ -1,5 +1,6 @@
 import type  { Vector3 } from '@minecraft/server';
 import type { World } from '../world';
+import type { AgentActionResult } from '../types';
 import { CommandStatusCode, type AgentDirection } from '../enums';
 
 /**
@@ -68,24 +69,37 @@ export class Agent {
     if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
   }
 
-  public async inspect(direction: AgentDirection): Promise<void> {
-    const res = await this.world.runCommand(`agent inspect ${direction}`);
-    if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
+  /**
+   * Reports the block the agent is facing in the specified direction.
+   *
+   * @remarks
+   * The payload lands in {@link AgentActionResult.body}. Its field names are not documented
+   * by Mojang and are not asserted here; read `body` to discover them, or pass a type
+   * argument once you have confirmed the shape against a live client.
+   */
+  public async inspect(direction: AgentDirection): Promise<AgentActionResult> {
+    return await this.world.runAgentCommand(`agent inspect ${direction}`);
   }
 
-  public async inspectData(direction: AgentDirection): Promise<void> {
-    const res = await this.world.runCommand(`agent inspectdata ${direction}`);
-    if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
+  /**
+   * Reports the block data value of the block the agent is facing.
+   */
+  public async inspectData(direction: AgentDirection): Promise<AgentActionResult> {
+    return await this.world.runAgentCommand(`agent inspectdata ${direction}`);
   }
 
-  public async detect(direction: AgentDirection): Promise<void> {
-    const res = await this.world.runCommand(`agent detect ${direction}`);
-    if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
+  /**
+   * Reports whether a collidable block is present in the specified direction.
+   */
+  public async detect(direction: AgentDirection): Promise<AgentActionResult> {
+    return await this.world.runAgentCommand(`agent detect ${direction}`);
   }
 
-  public async detectRedstone(direction: AgentDirection): Promise<void> {
-    const res = await this.world.runCommand(`agent detectredstone ${direction}`);
-    if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
+  /**
+   * Reports whether a redstone signal is present in the specified direction.
+   */
+  public async detectRedstone(direction: AgentDirection): Promise<AgentActionResult> {
+    return await this.world.runAgentCommand(`agent detectredstone ${direction}`);
   }
 
   /**
@@ -141,22 +155,28 @@ export class Agent {
     if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
   }
 
-  public async getItemCount(slot: number): Promise<void> {
-    // Sadly this command does not return any data
-    const res = await this.world.runCommand(`agent getitemcount ${slot}`);
-    if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
+  /**
+   * Reports the number of items in the specified slot.
+   * @param slot **one**-based index of the slot in the agent's inventory
+   */
+  public async getItemCount(slot: number): Promise<AgentActionResult> {
+    return await this.world.runAgentCommand(`agent getitemcount ${slot}`);
   }
 
-  public async getItemSpace(slot: number): Promise<void> {
-    // Sadly this command does not return any data
-    const res = await this.world.runCommand(`agent getitemspace ${slot}`);
-    if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
+  /**
+   * Reports the remaining space in the specified slot.
+   * @param slot **one**-based index of the slot in the agent's inventory
+   */
+  public async getItemSpace(slot: number): Promise<AgentActionResult> {
+    return await this.world.runAgentCommand(`agent getitemspace ${slot}`);
   }
 
-  public async getItemDetail(slot: number): Promise<void> {
-    // Sadly this command does not return any data
-    const res = await this.world.runCommand(`agent getitemdetail ${slot}`);
-    if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
+  /**
+   * Reports the item held in the specified slot.
+   * @param slot **one**-based index of the slot in the agent's inventory
+   */
+  public async getItemDetail(slot: number): Promise<AgentActionResult> {
+    return await this.world.runAgentCommand(`agent getitemdetail ${slot}`);
   }
 
   /**

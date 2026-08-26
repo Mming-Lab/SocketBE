@@ -178,6 +178,7 @@ export class Network extends ExtendedEmitter<NetworkEvents> {
       MessagePurpose.Error,
       MessagePurpose.Event,
       MessagePurpose.DataResponse,
+      MessagePurpose.AgentAction,
     ];
 
     if (!deserializablePurposes.includes(messagePurpose)) {
@@ -191,6 +192,7 @@ export class Network extends ExtendedEmitter<NetworkEvents> {
       case MessagePurpose.Encrypt: packetId = Packet.EncryptionResponse; break;
       case MessagePurpose.Error: packetId = Packet.CommandError; break;
       case MessagePurpose.DataResponse: packetId = Packet.DataResponse; break;
+      case MessagePurpose.AgentAction: packetId = Packet.AgentActionResponse; break;
       case MessagePurpose.Event: packetId = rawPacket.header.eventName; break;
       default:
         packetId = undefined!;

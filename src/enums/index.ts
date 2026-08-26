@@ -1,4 +1,5 @@
 export * from './ability-type';
+export * from './agent-action-type';
 export * from './agent-direction';
 export * from './command-status-code';
 export * from './command-version';

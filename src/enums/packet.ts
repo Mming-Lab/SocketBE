@@ -8,6 +8,7 @@ export enum Packet {
   EventUnsubscribe = 'unsubscribe',
   EncryptionRequest = 'ws:encryptionRequest',
   EncryptionResponse = 'ws:encryptionResponse',
+  AgentActionResponse = 'action:agent',
 
   // --- mc event packets ---
   BlockBroken = 'BlockBroken',

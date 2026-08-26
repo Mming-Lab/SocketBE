@@ -1,4 +1,5 @@
 export * from '../block/block';
+export * from './agent-action-result';
 export * from './command-options';
 export * from './command-result';
 export * from './rawtext-resolvable';

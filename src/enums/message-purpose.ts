@@ -10,4 +10,9 @@ export enum MessagePurpose {
   BlockDataRequest = 'data:block',
   ItemDataRequest = 'data:item',
   MobDataRequest = 'data:mob',
+  /**
+   * Dedicated channel for agent commands, introduced in Bedrock 1.18.30.
+   * Used for both the request and the response frame.
+   */
+  AgentAction = 'action:agent',
 }

@@ -8,6 +8,7 @@ import { serializeStates } from '../block';
 import type { RawMessage, Vector3 } from '@minecraft/server';
 import type { Server } from '../server';
 import type {
+  AgentActionResult,
   PlayerList,
   PlayerDetail,
   PlayerListDetail,
@@ -112,6 +113,40 @@ export class World {
 
     const response = await this.connection.awaitResponse<CommandResponsePacket>(header.requestId, options?.timeout);
     return response.toCommandResult<R>();
+  }
+
+  /**
+   * Runs an agent command over the dedicated `action:agent` channel.
+   *
+   * Agent commands answer with two frames that share one `requestId`: a status-only
+   * `commandResponse`, and an `action:agent` frame carrying the payload. Sending an agent
+   * command as a plain `commandRequest` discards that payload, which is why the helpers on
+   * {@link Agent} previously reported nothing.
+   *
+   * @param command Agent command to run, including the leading `agent` keyword.
+   * @returns The `action:agent` payload, with the paired `commandResponse` attached.
+   *
+   * @throws This function can throw errors.
+   * - {@link InvalidConnectionError}
+   * - {@link RequestTimeoutError}
+   * - {@link MissingAgentActionError}
+   */
+  public async runAgentCommand<R extends Record<string, unknown> = Record<string, unknown>>(
+    command: string,
+    options?: CommandOptions,
+  ): Promise<AgentActionResult<R>> {
+    const packet = new CommandRequestPacket();
+    packet.version = options?.version ?? this.server.options.commandVersion!;
+    packet.commandLine = command;
+
+    const header = this.send(packet, { overrideMessagePurpose: MessagePurpose.AgentAction });
+    if (!header) throw new Error('Packet transmission canceled');
+
+    return await this.connection.awaitResponse<AgentActionResult<R>>(
+      header.requestId,
+      options?.timeout,
+      { expectsAgentAction: true },
+    );
   }
   
   /**

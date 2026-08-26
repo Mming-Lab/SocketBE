@@ -1,6 +1,6 @@
-import type { MessagePurpose, Packet } from '../../enums';
+import type { AgentActionType, MessagePurpose, Packet } from '../../enums';
 
-export type IHeader = EventHeader | CommandHeader | ErrorHeader | EncryptHeader | DataResponseHeader;
+export type IHeader = EventHeader | CommandHeader | ErrorHeader | EncryptHeader | DataResponseHeader | AgentActionHeader;
 
 export interface EventHeader extends BaseHeader {
   messagePurpose: MessagePurpose.Subscribe | MessagePurpose.Unsubscribe | MessagePurpose.Event;
@@ -29,6 +29,16 @@ export interface DataResponseHeader extends BaseHeader {
   type: number;
 }
 
+
+/**
+ * Header of an `action:agent` frame. Used in both directions: the request carries only the
+ * base fields, while the response adds the action discriminator and its name.
+ */
+export interface AgentActionHeader extends BaseHeader {
+  messagePurpose: MessagePurpose.AgentAction;
+  action?: AgentActionType;
+  actionName?: string;
+}
 interface BaseHeader {
   version: number;
   requestId: string;

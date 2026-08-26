@@ -4,6 +4,7 @@ import type { BasePacket } from './base';
 import { CommandRequestPacket } from './command-request';
 import { CommandResponsePacket } from './command-response';
 import { CommandErrorPacket } from './command-error';
+import { AgentActionResponsePacket } from './agent-action-response';
 import { DataRequestPacket } from './data-request';
 import { DataResponsePacket } from './data-response';
 import { EventSubscribePacket } from './event-subscribe';
@@ -37,6 +38,7 @@ export const Packets = {
   [Packet.EventUnsubscribe]: EventUnsubscribePacket,
   [Packet.EncryptionRequest]: EncryptionRequestPacket,
   [Packet.EncryptionResponse]: EncryptionResponsePacket,
+  [Packet.AgentActionResponse]: AgentActionResponsePacket,
 
   // --- mc event packets ---
   [Packet.BlockBroken]: BlockBrokenPacket,
