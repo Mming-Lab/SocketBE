@@ -5,17 +5,17 @@
  * @remarks
  * Bedrock reports an entity by number in some events and by identifier string in others.
  * `MobKilled.victim.type` gives `"minecraft:zombie"`, while the two fields above give
- * `32`. This enum covers the numbers.
+ * `32`. This enum covers those raw IDs.
  *
- * Every member was measured: the entity was summoned by name and the number read off the
- * resulting `EntitySpawned` frame. Two of them cross-check against deaths that happened
- * unprompted, where a zombie reported `killer.type` 32 and a creeper reported 33 -
- * matching what `summon zombie` and `summon creeper` produce.
+ * The values are the low byte of Bedrock's `ActorType` (`ActorType::TypeMask`), as
+ * defined by Endstone. The native enum also ORs category flags into its values, so those
+ * flag-bearing values must not be used directly here.
  *
- * It is still not the whole table, so both fields stay plain `number`s. Note also that
+ * @see {@link https://github.com/EndstoneMC/endstone/blob/56065defb20f0f96303325e3e9108c4e6c104043/src/bedrock/world/actor/actor_types.h|Endstone ActorType definition}
+ *
  * `EntitySpawned` fires only for mobs: summoning an arrow, a snowball, TNT, a boat or a
- * minecart each reported `wasSpawned: true` and raised no event, so non-mob entities
- * cannot be numbered from this route at all.
+ * minecart each reported `wasSpawned: true` and raised no event. Non-mob entries remain
+ * useful for `PlayerDied.killer.type` and for interpreting values returned elsewhere.
  */
 export enum EntityTypeId {
   /**
@@ -28,6 +28,9 @@ export enum EntityTypeId {
   Pig = 12,
   Sheep = 13,
   Wolf = 14,
+  /** The pre-VillagerV2 villager type. */
+  VillagerV1 = 15,
+  Mooshroom = 16,
   Squid = 17,
   Rabbit = 18,
   Bat = 19,
@@ -37,6 +40,8 @@ export enum EntityTypeId {
   Horse = 23,
   Donkey = 24,
   Mule = 25,
+  SkeletonHorse = 26,
+  ZombieHorse = 27,
   PolarBear = 28,
   Llama = 29,
   Parrot = 30,
@@ -53,20 +58,68 @@ export enum EntityTypeId {
   Ghast = 41,
   MagmaCube = 42,
   Blaze = 43,
+  ZombieVillager = 44,
   Witch = 45,
   Stray = 46,
   Husk = 47,
   WitherSkeleton = 48,
   Guardian = 49,
+  ElderGuardian = 50,
+  Npc = 51,
+  WitherBoss = 52,
+  EnderDragon = 53,
   Shulker = 54,
   Endermite = 55,
+  Agent = 56,
   Vindicator = 57,
   Phantom = 58,
   Ravager = 59,
   ArmorStand = 61,
+  TripodCamera = 62,
+  Player = 63,
+  Item = 64,
+  PrimedTnt = 65,
+  FallingBlock = 66,
+  MovingBlock = 67,
+  ExperiencePotion = 68,
+  ExperienceOrb = 69,
+  EyeOfEnder = 70,
+  EnderCrystal = 71,
+  FireworksRocket = 72,
+  Trident = 73,
   Turtle = 74,
   Cat = 75,
+  ShulkerBullet = 76,
+  FishingHook = 77,
+  Chalkboard = 78,
+  DragonFireball = 79,
+  Arrow = 80,
+  Snowball = 81,
+  ThrownEgg = 82,
+  Painting = 83,
+  MinecartRideable = 84,
+  LargeFireball = 85,
+  ThrownPotion = 86,
+  EnderPearl = 87,
+  LeashKnot = 88,
+  WitherSkull = 89,
+  BoatRideable = 90,
+  WitherSkullDangerous = 91,
+  LightningBolt = 93,
+  SmallFireball = 94,
+  AreaEffectCloud = 95,
+  MinecartHopper = 96,
+  MinecartTnt = 97,
+  MinecartChest = 98,
+  MinecartFurnace = 99,
+  MinecartCommandBlock = 100,
+  LingeringPotion = 101,
+  LlamaSpit = 102,
+  EvocationFang = 103,
+  Evoker = 104,
   Vex = 105,
+  IceBomb = 106,
+  Balloon = 107,
   Pufferfish = 108,
   Salmon = 109,
   Drowned = 110,
@@ -75,7 +128,11 @@ export enum EntityTypeId {
   Panda = 113,
   Pillager = 114,
   Villager = 115,
+  ZombieVillagerV2 = 116,
+  Shield = 117,
   WanderingTrader = 118,
+  Lectern = 119,
+  ElderGuardianGhost = 120,
   Fox = 121,
   Bee = 122,
   Piglin = 123,
@@ -86,7 +143,25 @@ export enum EntityTypeId {
   Axolotl = 130,
   Warden = 131,
   Frog = 132,
+  Tadpole = 133,
   Allay = 134,
+  ChestBoatRideable = 136,
+  TraderLlama = 137,
   Camel = 138,
   Sniffer = 139,
+  Breeze = 140,
+  BreezeWindCharge = 141,
+  Armadillo = 142,
+  WindCharge = 143,
+  Bogged = 144,
+  OminousItemSpawner = 145,
+  Creaking = 146,
+  HappyGhast = 147,
+  CopperGolem = 148,
+  Nautilus = 149,
+  ZombieNautilus = 150,
+  Parched = 151,
+  CamelHusk = 152,
+  SulfurCube = 153,
+  Cushion = 154,
 }
