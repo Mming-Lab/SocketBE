@@ -3,11 +3,13 @@ import { CommandRequestPacket, CommandResponsePacket, DataRequestPacket, Encrypt
 import { EnableEncryptionSignal, PlayerJoinSignal, PlayerLeaveSignal, WorldInitializeSignal } from '../events';
 import { Agent, EntityQueryUtil, Player } from '../entity';
 import { CommandStatusCode, EncryptionMode, FillBlocksMode, MessagePurpose, MinecraftCommandVersion, WeatherType } from '../enums';
-import { jsonParseFixed, RawTextUtil } from '../world';
+import { decodeChunkData, jsonParseFixed, RawTextUtil } from '../world';
 import { serializeStates } from '../block';
 import type { RawMessage, Vector3 } from '@minecraft/server';
 import type { Server } from '../server';
 import type {
+  ChunkData,
+  ChunkDimension,
   PlayerList,
   PlayerDetail,
   PlayerListDetail,
@@ -365,6 +367,45 @@ export class World {
 
     const res = await this.connection.awaitResponse<DataResponsePacket>(header.requestId);
     return res.data;
+  }
+
+  /**
+   * Reads one horizontal slice of a chunk, as a map would draw it.
+   *
+   * @remarks
+   * `getchunkdata` is one of the commands that exists only over this socket - it is not in
+   * `/help`, so its shape had to be measured. It takes exactly four arguments and rejects
+   * relative coordinates.
+   *
+   * It does **not** return block identifiers. For each of the 256 columns it returns the
+   * map colour of the highest block at or below `y`, and that block's height, which makes
+   * it useful for minimaps and overhead views and useless for asking what a block is.
+   *
+   * @param chunkX Chunk coordinate, i.e. the block coordinate divided by 16 and floored.
+   * @param chunkZ Chunk coordinate.
+   * @param y Ceiling. Columns report the highest block at or below this.
+   * @param dimension Only `overworld`, `nether` and `the_end` are accepted, and the
+   * dimension has to be loaded - an unvisited one answers "dimension not found".
+   */
+  public async getChunkData(
+    chunkX: number,
+    chunkZ: number,
+    y: number,
+    dimension: ChunkDimension = 'overworld',
+  ): Promise<ChunkData> {
+    const res = await this.runCommand<{ data: string }>(
+      `getchunkdata ${dimension} ${Math.floor(chunkX)} ${Math.floor(chunkZ)} ${Math.floor(y)}`
+    );
+    if (res.statusCode < CommandStatusCode.Success) throw new Error(res.statusMessage);
+
+    return {
+      dimension,
+      chunkX: Math.floor(chunkX),
+      chunkZ: Math.floor(chunkZ),
+      requestedY: Math.floor(y),
+      columns: decodeChunkData(res.data, Math.floor(y)),
+      raw: res.data,
+    };
   }
 
   public async getOrCreateAgent(): Promise<Agent> {

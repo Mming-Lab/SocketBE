@@ -1,3 +1,4 @@
+export * from './chunk';
 export * from './json';
 export * from './rawtext';
 export * from './scoreboard';
