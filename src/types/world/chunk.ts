@@ -44,3 +44,13 @@ export interface ChunkData {
 
 /** Dimensions `getchunkdata` accepts. Measured: these three parse, other spellings do not. */
 export type ChunkDimension = 'overworld' | 'nether' | 'the_end';
+
+/** What `summon` reports back. */
+export interface SummonResult {
+  /** Namespaced identifier, e.g. `minecraft:chicken`. */
+  entityType: string;
+  spawnPos: { x: number, y: number, z: number };
+  /** The new entity's unique id, as a string. */
+  uId: string;
+  wasSpawned: boolean;
+}

@@ -2,6 +2,7 @@ export * from './ability-type';
 export * from './agent-direction';
 export * from './command-status-code';
 export * from './command-version';
+export * from './data-response-type';
 export * from './display-slot-id';
 export * from './enchantment-type';
 export * from './encryption-mode';
