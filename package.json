@@ -1,6 +1,6 @@
 {
   "name": "socket-be",
-  "version": "2.6.0",
+  "version": "2.6.0-makenode.2",
   "description": "This is a tool to connect with MinecraftBE via websocket easier.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -16,6 +16,7 @@
     "test": "tsdown -c ./test/tsdown.config.mts && node --enable-source-maps test/dist/index.mjs",
     "lint": "oxlint --type-aware --type-check",
     "build": "tsdown",
+    "prepare": "tsdown",
     "prepublishOnly": "pnpm run lint && pnpm run build"
   },
   "dependencies": {
@@ -32,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tutinoko2048/SocketBE.git"
+    "url": "git+https://github.com/Mming-Lab/SocketBE.git"
   },
   "keywords": [
     "minecraft",
@@ -42,9 +43,9 @@
   "author": "tutinoko2048",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tutinoko2048/SocketBE/issues"
+    "url": "https://github.com/Mming-Lab/SocketBE/issues"
   },
-  "homepage": "https://github.com/tutinoko2048/SocketBE#readme",
+  "homepage": "https://github.com/Mming-Lab/SocketBE#readme",
   "files": [
     "dist"
   ],
