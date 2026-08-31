@@ -1,6 +1,7 @@
 export * from './ability-type';
 export * from './agent-action-type';
 export * from './agent-direction';
+export * from './block-placement-method';
 export * from './command-status-code';
 export * from './command-version';
 export * from './display-slot-id';
